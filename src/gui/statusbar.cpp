@@ -62,7 +62,9 @@ static lv_obj_t *statusbar_wifilabel = NULL;
 static lv_obj_t *statusbar_wifiiplabel = NULL;
 static lv_obj_t *statusbar_bluetooth = NULL;
 static lv_obj_t *statusbar_gps = NULL;
-static lv_obj_t *statusbar_stepcounterlabel = NULL;
+#ifdef ADD_UNUSED_STATUSBAR_ITEMS
+    static lv_obj_t *statusbar_stepcounterlabel = NULL;
+#endif
 static lv_obj_t *statusbar_volume_slider = NULL;
 static lv_obj_t *statusbar_brightness_slider = NULL;
 static lv_obj_t *statusbar_sound_icon = NULL;
@@ -97,7 +99,9 @@ void statusbar_event( lv_obj_t * statusbar, lv_event_t event );
 void statusbar_wifi_event_cb( lv_obj_t *wifi, lv_event_t event );
 void statusbar_bluetooth_event_cb( lv_obj_t *bluetooth, lv_event_t event );
 void statusbar_volume_slider_event_handler_cb( lv_obj_t *sound_slider, lv_event_t event );
-bool statusbar_gpsctl_event_cb( EventBits_t event, void *arg );
+#ifdef ADD_UNUSED_STATUSBAR_ITEMS
+    bool statusbar_gpsctl_event_cb( EventBits_t event, void *arg );
+#endif
 void statusbar_sound_event_cb( lv_obj_t *sound, lv_event_t event );
 void statusbar_display_event_cb( lv_obj_t *display, lv_event_t event );
 void statusbar_brightness_slider_event_handler_cb( lv_obj_t *brightness_slider, lv_event_t event );
@@ -106,14 +110,18 @@ bool statusbar_soundctl_event_cb( EventBits_t event, void *arg );
 bool statusbar_blectl_event_cb( EventBits_t event, void *arg );
 bool statusbar_wifictl_event_cb( EventBits_t event, void *arg );
 bool statusbar_rtcctl_event_cb( EventBits_t event, void *arg );
-bool statusbar_bmactl_event_cb( EventBits_t event, void *arg );
+#ifdef ADD_UNUSED_STATUSBAR_ITEMS
+    bool statusbar_bmactl_event_cb( EventBits_t event, void *arg );
+#endif
 bool statusbar_pmuctl_event_cb( EventBits_t event, void *arg );
 bool statusbar_displayctl_event_cb( EventBits_t event, void *arg );
 
 void statusbar_wifi_set_state( bool state, const char *wifiname );
 void statusbar_wifi_set_ip_state( bool state, const char *ip );
 void statusbar_bluetooth_set_state( bool state );
-void statusbar_gps_event_cb( lv_obj_t *gps, lv_event_t event );
+#ifdef ADD_UNUSED_STATUSBAR_ITEMS
+    void statusbar_gps_event_cb( lv_obj_t *gps, lv_event_t event );
+#endif
 void statusbar_set_dark( bool dark_mode );
 
 lv_task_t * statusbar_task;
@@ -243,22 +251,34 @@ void statusbar_setup( void )
     lv_obj_set_event_cb( statusbar_bluetooth, statusbar_bluetooth_event_cb );
     lv_imgbtn_set_state( statusbar_bluetooth, LV_BTN_STATE_CHECKED_PRESSED );
 
-    statusbar_gps = lv_imgbtn_create( statusbar, NULL);
-    lv_imgbtn_set_src( statusbar_gps, LV_BTN_STATE_RELEASED, &gps_64px );
-    lv_imgbtn_set_src( statusbar_gps, LV_BTN_STATE_PRESSED, &gps_64px );
-    lv_imgbtn_set_src( statusbar_gps, LV_BTN_STATE_CHECKED_RELEASED, &gps_64px );
-    lv_imgbtn_set_src( statusbar_gps, LV_BTN_STATE_CHECKED_PRESSED, &gps_64px );
-    lv_imgbtn_set_checkable (statusbar_gps, true );
-    lv_obj_add_style( statusbar_gps, LV_IMGBTN_PART_MAIN, &style );
-    lv_obj_align( statusbar_gps, statusbar, LV_ALIGN_IN_TOP_LEFT, 8, STATUSBAR_HEIGHT );
-    lv_obj_set_event_cb( statusbar_gps, statusbar_gps_event_cb );
-    lv_imgbtn_set_state( statusbar_gps, LV_BTN_STATE_CHECKED_PRESSED );
+    #ifdef ADD_UNUSED_STATUSBAR_ITEMS
+        statusbar_gps = lv_imgbtn_create( statusbar, NULL);
+        lv_imgbtn_set_src( statusbar_gps, LV_BTN_STATE_RELEASED, &gps_64px );
+        lv_imgbtn_set_src( statusbar_gps, LV_BTN_STATE_PRESSED, &gps_64px );
+        lv_imgbtn_set_src( statusbar_gps, LV_BTN_STATE_CHECKED_RELEASED, &gps_64px );
+        lv_imgbtn_set_src( statusbar_gps, LV_BTN_STATE_CHECKED_PRESSED, &gps_64px );
+        lv_imgbtn_set_checkable (statusbar_gps, true );
+        lv_obj_add_style( statusbar_gps, LV_IMGBTN_PART_MAIN, &style );
+        lv_obj_align( statusbar_gps, statusbar, LV_ALIGN_IN_TOP_LEFT, 8, STATUSBAR_HEIGHT );
+        lv_obj_set_event_cb( statusbar_gps, statusbar_gps_event_cb );
+        lv_imgbtn_set_state( statusbar_gps, LV_BTN_STATE_CHECKED_PRESSED );
+    #else
+        // Just add a disabled icon as a placeholder to prevent clicking on the underlying item
+        statusbar_gps = lv_imgbtn_create( statusbar, NULL);
+        lv_imgbtn_set_src( statusbar_gps, LV_BTN_STATE_CHECKED_DISABLED, &gps_64px );
+        lv_imgbtn_set_checkable (statusbar_gps, false );
+        lv_obj_add_style( statusbar_gps, LV_IMGBTN_PART_MAIN, &style );
+        lv_obj_align( statusbar_gps, statusbar, LV_ALIGN_IN_TOP_LEFT, 8, STATUSBAR_HEIGHT );
+        lv_imgbtn_set_state( statusbar_gps, LV_BTN_STATE_CHECKED_DISABLED );
+    #endif
 
-    statusbar_stepcounterlabel = lv_label_create(statusbar, NULL );
-    lv_obj_reset_style_list( statusbar_stepcounterlabel, LV_OBJ_PART_MAIN );
-    lv_obj_add_style( statusbar_stepcounterlabel, LV_OBJ_PART_MAIN, &statusbarstyle[ STATUSBAR_STYLE_WHITE ] );
-    lv_label_set_text( statusbar_stepcounterlabel, "0");
-    lv_obj_align( statusbar_stepcounterlabel, statusbar, LV_ALIGN_IN_LEFT_MID, 5, 0 );
+    #ifdef ADD_UNUSED_STATUSBAR_ITEMS
+        statusbar_stepcounterlabel = lv_label_create(statusbar, NULL );
+        lv_obj_reset_style_list( statusbar_stepcounterlabel, LV_OBJ_PART_MAIN );
+        lv_obj_add_style( statusbar_stepcounterlabel, LV_OBJ_PART_MAIN, &statusbarstyle[ STATUSBAR_STYLE_WHITE ] );
+        lv_label_set_text( statusbar_stepcounterlabel, "0");
+        lv_obj_align( statusbar_stepcounterlabel, statusbar, LV_ALIGN_IN_LEFT_MID, 5, 0 );
+    #endif
 
     lv_obj_t *statusbar_volume_cont = lv_obj_create( statusbar, NULL );
     lv_obj_add_style( statusbar_volume_cont, LV_OBJ_PART_MAIN, &style );
@@ -323,10 +343,14 @@ void statusbar_setup( void )
     blectl_register_cb( BLECTL_CONNECT | BLECTL_DISCONNECT | BLECTL_ON | BLECTL_OFF, statusbar_blectl_event_cb, "statusbar bluetooth" );
     wifictl_register_cb( WIFICTL_CONNECT | WIFICTL_DISCONNECT | WIFICTL_OFF | WIFICTL_ON | WIFICTL_SCAN | WIFICTL_WPS_SUCCESS | WIFICTL_WPS_FAILED | WIFICTL_CONNECT_IP, statusbar_wifictl_event_cb, "statusbar wifi" );
     rtcctl_register_cb( RTCCTL_ALARM_ENABLED | RTCCTL_ALARM_DISABLED, statusbar_rtcctl_event_cb, "statusbar rtc" );
-    bma_register_cb( BMACTL_STEPCOUNTER, statusbar_bmactl_event_cb, "statusbar stepcounter" );
+    #ifdef ADD_UNUSED_STATUSBAR_ITEMS
+        bma_register_cb( BMACTL_STEPCOUNTER, statusbar_bmactl_event_cb, "statusbar stepcounter" );
+    #endif
     pmu_register_cb( PMUCTL_STATUS, statusbar_pmuctl_event_cb, "statusbar pmu");
     display_register_cb( DISPLAYCTL_BRIGHTNESS, statusbar_displayctl_event_cb, "statusbar display" );
-    gpsctl_register_cb( GPSCTL_ENABLE | GPSCTL_DISABLE | GPSCTL_FIX | GPSCTL_NOFIX, statusbar_gpsctl_event_cb, "statusbar gps" );
+    #ifdef ADD_UNUSED_STATUSBAR_ITEMS
+        gpsctl_register_cb( GPSCTL_ENABLE | GPSCTL_DISABLE | GPSCTL_FIX | GPSCTL_NOFIX, statusbar_gpsctl_event_cb, "statusbar gps" );
+    #endif
 
     statusbar_task = lv_task_create( statusbar_update_task, 250, LV_TASK_PRIO_MID, NULL );
 
@@ -353,6 +377,7 @@ void statusbar_update_task( lv_task_t * task ) {
     }
 }
 
+#ifdef ADD_UNUSED_STATUSBAR_ITEMS
 bool statusbar_gpsctl_event_cb( EventBits_t event, void *arg ) {
     /*
      * check if statusbar ready
@@ -385,6 +410,7 @@ bool statusbar_gpsctl_event_cb( EventBits_t event, void *arg ) {
     return( true );
 
 }
+#endif
 
 bool statusbar_soundctl_event_cb( EventBits_t event, void *arg ) {
     /*
@@ -499,6 +525,7 @@ bool statusbar_pmuctl_event_cb( EventBits_t event, void *arg ) {
     return( true );
 }
 
+#ifdef ADD_UNUSED_STATUSBAR_ITEMS
 bool statusbar_bmactl_event_cb( EventBits_t event, void *arg ) {
     char stepcounter[16]="";
     /*
@@ -516,6 +543,7 @@ bool statusbar_bmactl_event_cb( EventBits_t event, void *arg ) {
     }
     return( true );
 }
+#endif
 
 bool statusbar_rtcctl_event_cb( EventBits_t event, void *arg ) {
     /*
@@ -729,6 +757,7 @@ void statusbar_wifi_event_cb( lv_obj_t *wifi, lv_event_t event ) {
     statusbar_refresh_update = true;
 }
 
+#ifdef ADD_UNUSED_STATUSBAR_ITEMS
 void statusbar_gps_event_cb( lv_obj_t *gps, lv_event_t event ) {
     /*
      * check if statusbar ready
@@ -755,6 +784,7 @@ void statusbar_gps_event_cb( lv_obj_t *gps, lv_event_t event ) {
             break;
     }
 }
+#endif
 
 void statusbar_bluetooth_event_cb( lv_obj_t *bluetooth, lv_event_t event ) {
     /*

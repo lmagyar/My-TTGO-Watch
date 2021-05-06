@@ -33,6 +33,10 @@
         #error "no ttgo t-watch 2020 version defined"
     #endif
 
+    // #define ADD_NOTE_TILE
+    // #define ADD_UNUSED_STATUSBAR_ITEMS
+    // #define ADD_UNUSED_APPS
+    // #define ADD_UNUSED_SETTINGS
 
     #define LILYGO_WATCH_LVGL                       /** @brief To use LVGL, you need to enable the macro LVGL */
     #define TWATCH_USE_PSRAM_ALLOC_LVGL             /** @brief enabled lillygo-lib to use PSRAM */ 
@@ -48,7 +52,7 @@
     /**
      * firmeware version string
      */
-    #define __FIRMWARE__            "2021042602"
+    #define __FIRMWARE__            "2021042651"
     /**
      * Allows to include config.h from C code
      */

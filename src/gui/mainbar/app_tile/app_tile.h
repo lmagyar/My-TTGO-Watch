@@ -27,7 +27,11 @@
 
     #define MAX_APPS_ICON_HORZ      3
     #define MAX_APPS_ICON_VERT      2
-    #define MAX_APPS_TILES          3
+    #ifdef ADD_UNUSED_APPS
+        #define MAX_APPS_TILES          3
+    #else
+        #define MAX_APPS_TILES          1
+    #endif
     #define MAX_APPS_ICON           ( MAX_APPS_ICON_HORZ * MAX_APPS_ICON_VERT * MAX_APPS_TILES )
 
     #define APP_ICON_X_SIZE         70

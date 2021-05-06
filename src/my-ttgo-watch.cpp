@@ -68,21 +68,26 @@ void setup() {
      * inlude your header file
      * and call your app setup
      */
-    osmmap_app_setup();
-    weather_app_setup();
-    stopwatch_app_setup();
-    alarm_clock_setup();
-    activity_app_setup();
-    gps_status_setup();
-    crypto_ticker_setup();
-    sailing_setup();
     osmand_app_setup();
-    IRController_setup();
-    fxrates_app_setup();
-    corona_app_detector_setup();
-    powermeter_app_setup();
-	FindPhone_setup();
-    example_app_setup();
+    #ifdef ADD_UNUSED_APPS
+        osmmap_app_setup();
+        sailing_setup();
+
+        weather_app_setup();
+        stopwatch_app_setup();
+        alarm_clock_setup();
+        activity_app_setup();
+        gps_status_setup();
+
+        IRController_setup();
+        fxrates_app_setup();
+        crypto_ticker_setup();
+        corona_app_detector_setup();
+        powermeter_app_setup();
+        FindPhone_setup();
+        example_app_setup();
+    #endif
+
     /**
      * post hardware setup
      * 

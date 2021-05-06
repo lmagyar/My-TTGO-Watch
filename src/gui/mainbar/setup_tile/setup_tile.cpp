@@ -27,6 +27,12 @@
 #include "gui/widget_styles.h"
 #include "hardware/motor.h"
 
+#ifdef ADD_NOTE_TILE
+    #define SETUP_TILE_OFFSET 1
+#else
+    #define SETUP_TILE_OFFSET 0
+#endif
+
 static bool setuptile_init = false;
 
 icon_t setup_entry[ MAX_SETUP_ICON ];
@@ -45,7 +51,7 @@ void setup_tile_setup( void ) {
     }
 
     for ( int tiles = 0 ; tiles < MAX_SETUP_TILES ; tiles++ ) {
-        setup_tile_num[ tiles ] = mainbar_add_tile( 1 + tiles , 1, "setup tile" );
+        setup_tile_num[ tiles ] = mainbar_add_tile( SETUP_TILE_OFFSET + tiles , 1, "setup tile" );
         setup_cont[ tiles ] = mainbar_get_tile_obj( setup_tile_num[ tiles ] );
     }
 

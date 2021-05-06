@@ -77,7 +77,9 @@ void gui_setup( void )
      */
     main_tile_setup();
     app_tile_setup();
-    note_tile_setup();
+    #ifdef ADD_NOTE_TILE
+        note_tile_setup();
+    #endif
     setup_tile_setup();
     /*
      * add input and status
@@ -91,17 +93,23 @@ void gui_setup( void )
      */
     battery_settings_tile_setup();
     display_settings_tile_setup();
-    move_settings_tile_setup();
+    sound_settings_tile_setup();
+    #ifdef ADD_UNUSED_SETTINGS
+        gps_settings_tile_setup();
+    #endif
     wlan_settings_tile_setup();
     bluetooth_settings_tile_setup();
     time_settings_tile_setup();
-    gps_settings_tile_setup();
-    #if defined( LILYGO_WATCH_HAS_SDCARD )
-        sdcard_settings_tile_setup();
+    #ifdef ADD_UNUSED_SETTINGS
+        move_settings_tile_setup();
+        #if defined( LILYGO_WATCH_HAS_SDCARD )
+            sdcard_settings_tile_setup();
+        #endif
     #endif
     update_tile_setup();
-    utilities_tile_setup();
-    sound_settings_tile_setup();
+    #ifdef ADD_UNUSED_SETTINGS
+        utilities_tile_setup();
+    #endif
     /*
      * trigger an activity
      */
