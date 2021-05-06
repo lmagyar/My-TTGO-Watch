@@ -36,6 +36,7 @@
 #include "hardware/blectl.h"
 #include "hardware/powermgm.h"
 #include "hardware/timesync.h"
+#include "hardware/motor.h"
 
 #include "quickglui/common/bluejsonrequest.h"
 
@@ -218,6 +219,7 @@ void osmand_bluetooth_message_msg_pharse( BluetoothJsonRequest &doc ) {
                 lv_label_set_text( osmand_app_info_label, doc["title"] );
                 lv_obj_align( osmand_app_info_label, osmand_app_distance_label, LV_ALIGN_OUT_BOTTOM_MID, 0, 5 );
             }
+            motor_vibe(1);
         }
         powermgm_set_event( POWERMGM_WAKEUP_REQUEST );
     }
