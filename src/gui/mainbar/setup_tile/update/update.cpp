@@ -33,6 +33,7 @@
 #include "gui/mainbar/setup_tile/bluetooth_settings/bluetooth_message.h"
 #include "gui/statusbar.h"
 #include "gui/setup.h"
+#include "gui/widget_factory.h"
 #include "gui/widget_styles.h"
 
 #include "hardware/display.h"
@@ -64,7 +65,6 @@ static bool reset = false;
 
 static void enter_update_setup_setup_event_cb( lv_obj_t * obj, lv_event_t event );
 static void enter_update_setup_event_cb( lv_obj_t * obj, lv_event_t event );
-static void exit_update_setup_event_cb( lv_obj_t * obj, lv_event_t event );
 static void update_event_handler(lv_obj_t * obj, lv_event_t event );
 
 bool update_http_ota_event_cb( EventBits_t event, void *arg );
@@ -74,8 +74,6 @@ void update_update_activate_cb( void );
 void update_update_hibernate_cb( void );
 void update_progress_task( lv_task_t *task );
 
-LV_IMG_DECLARE(exit_32px);
-LV_IMG_DECLARE(setup_32px);
 LV_IMG_DECLARE(update_64px);
 LV_IMG_DECLARE(info_1_16px);
 
@@ -93,28 +91,11 @@ void update_tile_setup( void ) {
     update_setup_icon = setup_register( "update", &update_64px, enter_update_setup_event_cb );
     setup_hide_indicator( update_setup_icon );
 
-    lv_obj_t *setup_btn = lv_imgbtn_create( update_settings_tile, NULL);
-    lv_imgbtn_set_src( setup_btn, LV_BTN_STATE_RELEASED, &setup_32px);
-    lv_imgbtn_set_src( setup_btn, LV_BTN_STATE_PRESSED, &setup_32px);
-    lv_imgbtn_set_src( setup_btn, LV_BTN_STATE_CHECKED_RELEASED, &setup_32px);
-    lv_imgbtn_set_src( setup_btn, LV_BTN_STATE_CHECKED_PRESSED, &setup_32px);
-    lv_obj_add_style( setup_btn, LV_IMGBTN_PART_MAIN, &update_settings_style );
+    lv_obj_t *setup_btn = wf_add_setup_button( update_settings_tile, enter_update_setup_setup_event_cb, &update_settings_style );
     lv_obj_align( setup_btn, update_settings_tile, LV_ALIGN_IN_TOP_RIGHT, -10, STATUSBAR_HEIGHT + 10 );
-    lv_obj_set_event_cb( setup_btn, enter_update_setup_setup_event_cb );
 
-    lv_obj_t *exit_btn = lv_imgbtn_create( update_settings_tile, NULL);
-    lv_imgbtn_set_src( exit_btn, LV_BTN_STATE_RELEASED, &exit_32px);
-    lv_imgbtn_set_src( exit_btn, LV_BTN_STATE_PRESSED, &exit_32px);
-    lv_imgbtn_set_src( exit_btn, LV_BTN_STATE_CHECKED_RELEASED, &exit_32px);
-    lv_imgbtn_set_src( exit_btn, LV_BTN_STATE_CHECKED_PRESSED, &exit_32px);
-    lv_obj_add_style( exit_btn, LV_IMGBTN_PART_MAIN, &update_settings_style );
-    lv_obj_align( exit_btn, update_settings_tile, LV_ALIGN_IN_TOP_LEFT, 10, STATUSBAR_HEIGHT + 10 );
-    lv_obj_set_event_cb( exit_btn, exit_update_setup_event_cb );
-    
-    lv_obj_t *exit_label = lv_label_create( update_settings_tile, NULL);
-    lv_obj_add_style( exit_label, LV_OBJ_PART_MAIN, &update_settings_style  );
-    lv_label_set_text( exit_label, "update");
-    lv_obj_align( exit_label, exit_btn, LV_ALIGN_OUT_RIGHT_MID, 5, 0 );
+    lv_obj_t *header = wf_add_settings_header( update_settings_tile, "update" );
+    lv_obj_align( header, update_settings_tile, LV_ALIGN_IN_TOP_LEFT, 10, STATUSBAR_HEIGHT + 10 );
 
     lv_obj_t *update_version_cont = lv_obj_create( update_settings_tile, NULL );
     lv_obj_set_size(update_version_cont, lv_disp_get_hor_res( NULL ) , 40);
@@ -227,13 +208,6 @@ static void enter_update_setup_event_cb( lv_obj_t * obj, lv_event_t event ) {
     switch( event ) {
         case( LV_EVENT_CLICKED ):       
             mainbar_jump_to_tilenumber( update_tile_num, LV_ANIM_OFF );
-            break;
-    }
-}
-static void exit_update_setup_event_cb( lv_obj_t * obj, lv_event_t event ) {
-    switch( event ) {
-        case( LV_EVENT_CLICKED ):       
-            mainbar_jump_to_tilenumber( setup_get_tile_num(), LV_ANIM_OFF );
             break;
     }
 }

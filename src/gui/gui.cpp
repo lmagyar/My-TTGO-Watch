@@ -22,6 +22,7 @@
 #include "config.h"
 #include <stdio.h>
 #include <TTGO.h>
+#include "gui/lv_fs/lv_fs_spiffs.h"
 
 #include "gui.h"
 #include "statusbar.h"
@@ -45,6 +46,8 @@
 #include "mainbar/setup_tile/sound_settings/sound_settings.h"
 #include "mainbar/setup_tile/gps_settings/gps_settings.h"
 #include "mainbar/setup_tile/sdcard_settings/sdcard_settings.h"
+#include "mainbar/setup_tile/watchface/watchface_manager.h"
+
 
 #include "mainbar/setup_tile/utilities/utilities.h"
 
@@ -54,12 +57,17 @@
 #include "hardware/touch.h"
 
 lv_obj_t *img_bin;
+static volatile bool force_redraw = false;
 
 bool gui_powermgm_event_cb( EventBits_t event, void *arg );
 bool gui_powermgm_loop_event_cb( EventBits_t event, void *arg );
 
-void gui_setup( void )
-{
+void gui_setup( void ) {
+    /**
+     * install lv fs spiffs wrapper
+     * files begin with "P:/foo.bar" -> "/spiffs/foo.bar"
+     */
+    lv_fs_if_spiffs_init();
     /*
      * Create an blank wallpaper
      */
@@ -107,6 +115,7 @@ void gui_setup( void )
     #ifdef ADD_UNUSED_SETTINGS
         utilities_tile_setup();
     #endif
+    watchface_manager_setup();
     /*
      * trigger an activity
      */
@@ -161,6 +170,11 @@ bool gui_powermgm_event_cb( EventBits_t event, void *arg ) {
                                         break;                                        
     }
     return( true );
+}
+
+
+void gui_force_redraw( bool force ) {
+    force_redraw = force;
 }
 
 void gui_set_background_image ( uint32_t background_image ) {
@@ -230,6 +244,11 @@ bool gui_powermgm_loop_event_cb( EventBits_t event, void *arg ) {
                                             powermgm_set_event( POWERMGM_STANDBY_REQUEST );
                                         }
                                         break;
+    }
+    if ( force_redraw ) {
+        force_redraw = !force_redraw;
+        lv_obj_invalidate( lv_scr_act() );
+        // lv_refr_now( NULL );
     }
     return( true );
 }

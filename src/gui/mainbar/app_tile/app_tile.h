@@ -28,7 +28,7 @@
     #define MAX_APPS_ICON_HORZ      3
     #define MAX_APPS_ICON_VERT      2
     #ifdef ADD_UNUSED_APPS
-        #define MAX_APPS_TILES          3
+        #define MAX_APPS_TILES          4
     #else
         #define MAX_APPS_TILES          1
     #endif

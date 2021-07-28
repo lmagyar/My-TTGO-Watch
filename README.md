@@ -9,12 +9,48 @@
 
 # My-TTGO-Watch
 
-A smartwatch based on ESP32 from LilyGo. Currently supoort for T-Watch2020 V1. T-Watch2020 V3 and V2 is added, but untested and not complete for lack of a watch.
+A smartwatch based on ESP32 from LilyGo. Currently support for T-Watch2020 V1, V2 and V3.
+
+## Features
+
+* BLE communication
+* Time synchronization via BLE
+* Notification via BLE
+* Step counting
+* Wake-up on wrist rotation
+* Quick actions:
+
+  * WiFi
+  * Bluetooth
+  * GPS
+  * Luminosity
+  * Sound volume
+
+* Multiple watch faces:
+
+  * Embedded (digital)
+  * [Community based watchfaces](https://sharandac.github.io/My-TTGO-Watchfaces/)
+
+* Multiple 'apps':
+
+  * Music (control the playback of the music on your phone)
+  * Navigation (displays navigation instructions coming from the companion app)
+  * Map (displays a map)
+  * Notification (displays the last notification received)
+  * Stopwatch (with all the necessary functions such as play, pause, stop)
+  * Alarm
+  * Step counter (displays the number of steps and daily objective)
+  * Weather
+  * Calendar
+  * IR remote
+  * ...
+
+* Companion apps: Gadgetbridge
 
 ## Install
 
 Clone this repository and open it with platformIO. Select the right env and then build and upload.
-Or follow the great step by step [tutorial](https://www.youtube.com/watch?v=wUGADCnerCs) from ShotokuTech[ShotokuTech](https://github.com/ShotokuTech).
+Or follow the great step by step [tutorial](https://www.youtube.com/watch?v=wUGADCnerCs) from [ShotokuTech](https://github.com/ShotokuTech).
 
 # Telegram chatgroup
 
@@ -35,6 +71,7 @@ Cf. [Usage](USAGE.md)
 [FantasyFactory](https://github.com/FantasyFactory/My-TTGO-Watch)<br>
 [NorthernDIY](https://github.com/NorthernDIY/My-TTGO-Watch)<br>
 [linuxthor](https://github.com/linuxthor/Hackers-TTGO-Watch)<br>
+[d03n3rfr1tz3](https://github.com/d03n3rfr1tz3/TTGO.T-Watch.2020)<br>
 
 # for the programmers
 

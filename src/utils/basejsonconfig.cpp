@@ -73,6 +73,52 @@ bool BaseJsonConfig::load() {
     return result;
 }
 
+bool BaseJsonConfig::load( uint32_t size ) {
+    bool result = false;
+    /*
+     * load config if exsits
+     */
+    if ( SPIFFS.exists(fileName) ) {
+        /*
+         * open file
+         */
+        fs::File file = SPIFFS.open(fileName, FILE_READ);
+        /*
+         * check if open was success
+         */
+        if (!file) {
+            log_e("Can't open file: %s!", fileName);
+        }
+        else {
+            /*
+             * create json structure
+             */
+            SpiRamJsonDocument doc( size );
+            DeserializationError error = deserializeJson( doc, file );
+            /*
+             * check if create json structure was successfull
+             */
+            if ( error || size == 0 ) {
+                log_e("json config deserializeJson() failed: %s, file: %s", error.c_str(), fileName );
+            }
+            else {
+                log_i("json config deserializeJson() success: %s, file: %s", error.c_str(), fileName );
+                result = onLoad(doc);
+            }
+            doc.clear();
+        }
+        file.close();
+    }
+    /*
+     * check if read from json is failed
+     */
+    if ( !result ) {
+        log_i("reading json failed, call defaults, file: %s", fileName );
+        result = onDefault();
+    }
+
+    return result;
+}
 
 bool BaseJsonConfig::save( uint32_t size ) {
     bool result = false;
@@ -98,6 +144,9 @@ bool BaseJsonConfig::save( uint32_t size ) {
         if (result == true && outSize == 0) {
             log_e("Failed to write config file %s", fileName);
             result = false;
+        }
+        else {
+            log_i("json config serializeJson() success: %s", fileName );
         }
         
         doc.clear();
@@ -132,6 +181,9 @@ bool BaseJsonConfig::save() {
         if (result == true && outSize == 0) {
             log_e("Failed to write config file %s", fileName);
             result = false;
+        }
+        else {
+            log_i("json config serializeJson() success: %s", fileName );            
         }
         
         doc.clear();

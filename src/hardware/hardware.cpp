@@ -22,6 +22,7 @@
 #include "hardware/timesync.h"
 #include "hardware/touch.h"
 #include "hardware/wifictl.h"
+#include "hardware/sdcard.h"
 
 #include "utils/fakegps.h"
 
@@ -35,9 +36,7 @@ void hardware_setup( void ) {
     ttgo->begin();
     ttgo->lvgl_begin();
     SPIFFS.begin();
-    #if defined( LILYGO_WATCH_HAS_SDCARD )
-        ttgo->sdcard_begin();
-    #endif
+    sdcard_setup();
     motor_setup();
     display_setup();
     screenshot_setup();
